@@ -1,0 +1,17 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[codz]
+*$py.class
+
+.git
+.gitignore
+.dockerignore
+__pycache__/
+core/__pycache__/
+routers/__pycache__/
+utils/__pycache__/
+snippet
+
+.ipynb_checkpoints/
+examples/.ipynb_checkpoints/
+.DS_Store
