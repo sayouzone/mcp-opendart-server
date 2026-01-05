@@ -5,20 +5,13 @@ OpenDart Crawler 사용 예시
 
 import os
 import pandas as pd
-import sys
 
 from datetime import datetime
 from dotenv import load_dotenv
-from pathlib import Path
 
-# 상위 디렉토리를 path에 추가
-sys.path.insert(0, str(Path(__file__).parent.parent))
-
-from opendart import OpenDartCrawler
-from opendart.utils import (
-    DISCLOSURE_ITEMS,
+from sayou.stock.opendart import OpenDartCrawler
+from sayou.stock.opendart.utils import (
     REPORT_ITEMS,
-    FINANCE_ITEMS,
     OWNERSHIP_ITEMS,
     MATERIAL_FACTS_ITEMS,
     REGISTRATION_ITEMS
@@ -107,8 +100,10 @@ def demo_finance(crawler: OpenDartCrawler, corp_code: str):
     
     data = crawler.finance(corp_code, year, api_type=api_type)
     #print(data)
+    outputs = []
     for item in data:
-        print(item)
+        outputs.append(item.to_dict())
+    print(outputs)
     
     # 단일회사 주요 재무지표
     api_type = "단일회사 주요 재무지표"

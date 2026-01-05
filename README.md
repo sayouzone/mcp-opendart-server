@@ -115,7 +115,6 @@ gcloud run deploy $MCP_SERVER_NAME \
     --no-allow-unauthenticated \
     --region=us-central1 \
     --source=. \
-    --set-env-vars="ENV_TYPE=pip" \
     --labels=dev-tutorial=stocks-mcp
 ```
 
@@ -125,7 +124,6 @@ gcloud run deploy $MCP_SERVER_NAME \
 gcloud run deploy $MCP_SERVER_NAME \
     --region=us-central1 \
     --source=. \
-    --set-env-vars="ENV_TYPE=pip" \
     --labels=dev-tutorial=stocks-mcp
 ```
 
@@ -146,12 +144,6 @@ settings.json
         "hasSeenNudge": true
     },
     "mcpServers": {
-        "stocks-remote": {
-            "httpUrl": "https://stocks-mcp-server-$PROJECT_NUMBER.us-central1.run.app/mcp",
-            "headers": {
-                "Authorization": "Bearer $ID_TOKEN"
-            }
-        },
         "opendart-remote": {
             "httpUrl": "https://opendart-mcp-server-$PROJECT_NUMBER.us-central1.run.app/mcp",
             "headers": {
@@ -186,6 +178,7 @@ gemini
 - 삼성전자 배당 정보를 보여줘
 - 삼성전자 배당에 대해 알려줘
 - 삼성전자 배당이 어떻게 되지?
+- 2025년 삼성전자 배당이 어떻게 되지?
 - 삼성전자 최근 배당 성향에 대해 알려줘
 - 삼성전자가 지급하는 보상에 대해 알려줘
 

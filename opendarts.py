@@ -8,16 +8,9 @@ from fastmcp import FastMCP
 from pathlib import Path
 from typing import Optional
 
-from utils.gcpmanager import GCSManager
-
-env_type = os.getenv("ENV_TYPE", "local")
-
-if env_type == "local":
-    from opendart import OpenDartCrawler
-else:
-    from sayou.stock.opendart import OpenDartCrawler
-
 from google.cloud import secretmanager
+
+from sayou.stock.opendart import OpenDartCrawler
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(format="[%(levelname)s]: %(message)s", level=logging.INFO)
@@ -30,6 +23,12 @@ print(f"DART API Key: {dart_api_key}")
 os.environ["DART_API_KEY"] = dart_api_key
 
 corpcode_filename = "corpcode.json"
+    
+# OpenDartCrawler를 초기화
+crawler = OpenDartCrawler(api_key=dart_api_key)
+if not crawler.corp_data:
+    corp_data = crawler.corp_data
+    crawler.save_corp_data(corpcode_filename)
 
 mcp = FastMCP("OpenDart MCP Server")
 
@@ -71,24 +70,26 @@ async def find_opendart_finance(stock: str, year: Optional[int] = None, quarter:
         - use_cache=True (기본값): GCS에서 캐시된 데이터를 먼저 확인 (빠름)
         - use_cache=False: 항상 새로 크롤링 (느림, 30초+ 소요)
     """
-    logger.info(f">>> 🛠️ Tool: 'find_opendart_data' called for '{stock}'")
+    logger.info(f">>> 🛠️ Tool: 'find_opendart_finance' called for '{stock}'")
 
+    # 년도와 분기 정보가 있는지 확인하고, 
+    # 없으면 오늘 기준으로 이전 분기를 설정합니다.
     is_date = year is not None and quarter is not None
-
     year, quarter = _year_quarter(year, quarter)
 
-    crawler = OpenDartCrawler(api_key=dart_api_key)
-    corp_data = crawler.corp_data
-    crawler.save_corp_data(corpcode_filename)
+    if not crawler.corp_data:
+        corp_data = crawler.corp_data
+        crawler.save_corp_data(corpcode_filename)
 
-    #api_type = "단일회사 주요계정"
-    api_type = "단일회사 전체 재무제표"
     corp_code = crawler.fetch_corp_code(stock)
+
+    #api_type = "단일회사 전체 재무제표"
 
     count = 1
     while True:
         logger.info(f"fetching finance data: {year}Q{quarter}")
-        data = crawler.finance(corp_code, year, quarter=quarter, api_type=api_type)
+        #data = crawler.finance(corp_code, year, quarter=quarter, api_type=api_type)
+        data = crawler.single_company_financial_statements(corp_code, year, quarter=quarter)
         if is_date or len(data) > 0 or count > 4:
             break
         quarter = quarter - 1 if quarter > 1 else 4
@@ -141,20 +142,21 @@ async def find_opendart_dividend(stock: str, year: Optional[int] = None, quarter
     logger.info(f">>> 🛠️ Tool: 'find_opendart_dividend' called for '{stock}'")
 
     is_date = year is not None and quarter is not None
-
     year, quarter = _year_quarter(year, quarter)
 
-    crawler = OpenDartCrawler(api_key=dart_api_key)
-    corp_data = crawler.corp_data
-    crawler.save_corp_data(corpcode_filename)
+    if not crawler.corp_data:
+        corp_data = crawler.corp_data
+        crawler.save_corp_data(corpcode_filename)
 
-    api_type = "배당에 관한 사항"
     corp_code = crawler.fetch_corp_code(stock)
+
+    #api_type = "배당에 관한 사항"
 
     count = 1
     while True:
         logger.info(f"fetching finance data: {year}Q{quarter}")
-        data = crawler.reports(corp_code, year=year, quarter=quarter, api_type=api_type)
+        #data = crawler.reports(corp_code, year=year, quarter=quarter, api_type=api_type)
+        data = crawler.dividends(corp_code, year=year, quarter=quarter)
         if is_date or len(data) > 0 or count > 4:
             break
         quarter = quarter - 1 if quarter > 1 else 4
@@ -206,23 +208,23 @@ async def find_opendart_compensation(stock: str, year: Optional[int] = None, qua
     logger.info(f">>> 🛠️ Tool: 'find_opendart_compensation' called for '{stock}'")
 
     is_date = year is not None and quarter is not None
-
     year, quarter = _year_quarter(year, quarter)
 
-    crawler = OpenDartCrawler(api_key=dart_api_key)
-    corp_data = crawler.corp_data
-    crawler.save_corp_data(corpcode_filename)
+    if not crawler.corp_data:
+        corp_data = crawler.corp_data
+        crawler.save_corp_data(corpcode_filename)
 
     corp_code = crawler.fetch_corp_code(stock)
 
     outputs = []
 
-    api_type = "이사·감사의 개인별 보수현황(5억원 이상)"
+    #api_type = "이사·감사의 개인별 보수현황(5억원 이상)"
 
     count = 1
     while True:
         logger.info(f"fetching finance data: {year}Q{quarter}")
-        data = crawler.reports(corp_code, year=year, quarter=quarter, api_type=api_type)
+        #data = crawler.reports(corp_code, year=year, quarter=quarter, api_type=api_type)
+        data = crawler.director_compensation(corp_code, year=year, quarter=quarter)
         if is_date or len(data) > 0 or count > 4:
             break
         quarter = quarter - 1 if quarter > 1 else 4
@@ -232,12 +234,13 @@ async def find_opendart_compensation(stock: str, year: Optional[int] = None, qua
     for item in data:
         outputs.append(item.to_dict())
 
-    api_type = "이사·감사 전체의 보수현황(보수지급금액 - 이사·감사 전체)"
+    #api_type = "이사·감사 전체의 보수현황(보수지급금액 - 이사·감사 전체)"
 
     count = 1
     while True:
         logger.info(f"fetching finance data: {year}Q{quarter}")
-        data = crawler.reports(corp_code, year=year, quarter=quarter, api_type=api_type)
+        #data = crawler.reports(corp_code, year=year, quarter=quarter, api_type=api_type)
+        data = crawler.total_director_compensation(corp_code, year=year, quarter=quarter)
         if is_date or len(data) > 0 or count > 4:
             break
         quarter = quarter - 1 if quarter > 1 else 4
@@ -247,12 +250,13 @@ async def find_opendart_compensation(stock: str, year: Optional[int] = None, qua
     for item in data:
         outputs.append(item.to_dict())
 
-    api_type = "개인별 보수지급 금액(5억이상 상위5인)"
+    #api_type = "개인별 보수지급 금액(5억이상 상위5인)"
 
     count = 1
     while True:
         logger.info(f"fetching finance data: {year}Q{quarter}")
-        data = crawler.reports(corp_code, year=year, quarter=quarter, api_type=api_type)
+        #data = crawler.reports(corp_code, year=year, quarter=quarter, api_type=api_type)
+        data = crawler.top5_director_compensation(corp_code, year=year, quarter=quarter)
         if is_date or len(data) > 0 or count > 4:
             break
         quarter = quarter - 1 if quarter > 1 else 4

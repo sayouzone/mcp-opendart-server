@@ -1,8 +1,8 @@
 [project]
-name = "stocks-mcp"
+name = "opendart-mcp"
 version = "0.1.0"
-description = "Deploying an Stocks MCP server on Cloud Run"
-requires-python = ">=3.13"
+description = "Deploying an OpenDart MCP server on Cloud Run"
+requires-python = ">=3.11"
 dependencies = [
     "fastmcp==2.12.4",
     "beautifulsoup4>=4.14.0",

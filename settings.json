@@ -8,12 +8,6 @@
             "headers": {
                 "Authorization": "Bearer $ID_TOKEN"
             }
-        },
-        "stocks-remote": {
-            "httpUrl": "https://stocks-mcp-server-$PROJECT_NUMBER.us-central1.run.app/mcp",
-            "headers": {
-                "Authorization": "Bearer $ID_TOKEN"
-            }
         }
     },
     "security": {

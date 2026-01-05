@@ -1,9 +1,6 @@
 # Use the official Python image
 FROM python:3.13-slim
 
-ARG ENV_TYPE=local
-ENV ENV_TYPE=$ENV_TYPE
-
 # Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
