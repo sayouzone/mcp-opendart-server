@@ -9,8 +9,18 @@ FastMCP를 사용하여 MCP 서버와 클라이언트를 빌드하는 빠르고 
 - Gemini 2.5 Pro
 - Gemini 2.5 Flash
 
+**OpenDart API**
+- [공시정보](https://opendart.fss.or.kr/guide/main.do?apiGrpCd=DS001)
+- [정기보고서 주요정보](https://opendart.fss.or.kr/guide/main.do?apiGrpCd=DS002)
+- [정기보고서 재무정보](https://opendart.fss.or.kr/guide/main.do?apiGrpCd=DS003)
+- [지분공시 종합정보](https://opendart.fss.or.kr/guide/main.do?apiGrpCd=DS004)
+- [주요사항보고서 주요정보](https://opendart.fss.or.kr/guide/main.do?apiGrpCd=DS005)
+- [증권신고서 주요정보](https://opendart.fss.or.kr/guide/main.do?apiGrpCd=DS006)
+
 **참조 문서**
 - [Cloud Run에 보안 MCP 서버를 배포하는 방법](https://codelabs.developers.google.com/codelabs/cloud-run/how-to-deploy-a-secure-mcp-server-on-cloud-run?hl=ko)
+
+![OpenDart MCP Server Build Process](https://storage.googleapis.com/sayouzone-homepage/blog/opendart_mcp_sesrver_build_process.jpg)
 
 ## 기본 요구사항
 
@@ -327,6 +337,72 @@ Tips for getting started:
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
  ~/.../src/sayou/mcp/stocks_mcp (main*)                                      no sandbox (see /docs)                                       auto
 ```
+
+```bash
+   ░░░            ░░░░░░░░░  ░░░░░░░░░░ ░░░░░░   ░░░░░░ ░░░░░ ░░░░░░   ░░░░░ ░░░░░
+     ░░░         ░░░     ░░░ ░░░        ░░░░░░   ░░░░░░  ░░░  ░░░░░░   ░░░░░  ░░░
+       ░░░      ░░░          ░░░        ░░░ ░░░ ░░░ ░░░  ░░░  ░░░ ░░░  ░░░    ░░░
+ ███     ░░░    █████████░░██████████ ██████ ░░██████░█████░██████ ░░█████ █████░
+   ███ ░░░     ███░    ███░███░░      ██████  ░██████░░███░░██████  ░█████  ███░░
+     ███      ███░░░     ░░███░░      ███░███ ███ ███░░███░░███░███  ███░░  ███░░
+   ░░░ ███    ███ ░░░█████░██████░░░░░███░░█████  ███░░███░░███░░███ ███░░░ ███░░░
+     ███      ███      ███ ███        ███   ███   ███  ███  ███   ██████    ███
+   ███         ███     ███ ███        ███         ███  ███  ███    █████    ███
+ ███            █████████  ██████████ ███         ███ █████ ███     █████  █████
+
+Tips for getting started:
+1. Ask questions, edit files, or run commands.
+2. Be specific for the best results.
+3. /help for more information.
+
+> 삼성전자 배당에 대해 알려줘
+
+╭───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ ✓  find_opendart_dividend (opendart-remote MCP Server) {"stock":"삼성전자"}                                                                                                   │
+│                                                                                                                                                                               │
+│ [{"rcept_no":"20251114002447","corp_code":"00126380","corp_cls":"Y","corp_name":"삼성전자","se":"주당액면가액(원)","stock_knd":null,"thstrm":"100","frmtrm":"100","lwfr":"100 │
+│ ","stlm_dt":"2025-09-30"},{"rcept_no":"20251114002447","corp_code":"00126380","corp_cls":"Y","corp_name":"삼성전자","se":"(연결)당기순이익(백만원)","stock_knd":null,"thstrm" │
+│ :"24,968,902","frmtrm":"33,621,363","lwfr":"14,473,401","stlm_dt":"2025-09-30"},{"rcept_no":"20251114002447","corp_code":"00126380","corp_cls":"Y","corp_name":"삼성전자","se │
+│ ":"(별도)당기순이익(백만원)","stock_knd":null,"thstrm":"19,807,790","frmtrm":"23,582,565","lwfr":"25,397,099","stlm_dt":"2025-09-30"},{"rcept_no":"20251114002447","corp_code │
+│ ":"00126380","corp_cls":"Y","corp_name":"삼성전자","se":"(연결)주당순이익(원)","stock_knd":null,"thstrm":"3,724","frmtrm":"4,950","lwfr":"2,131","stlm_dt":"2025-09-30"},{"rc │
+│ ept_no":"20251114002447","corp_code":"00126380","corp_cls":"Y","corp_name":"삼성전자","se":"현금배당금총액(백만원)","stock_knd":null,"thstrm":"7,354,422","frmtrm":"9,810,767 │
+│ ","lwfr":"9,809,438","stlm_dt":"2025-09-30"},{"rcept_no":"20251114002447","corp_code":"00126380","corp_cls":"Y","corp_name":"삼성전자","se":"주식배당금총액(백만원)","stock_k │
+│ nd":null,"thstrm":"-","frmtrm":"-","lwfr":"-","stlm_dt":"2025-09-30"},{"rcept_no":"20251114002447","corp_code":"00126380","corp_cls":"Y","corp_name":"삼성전자","se":"(연결)  │
+│ 현금배당성향(%)","stock_knd":null,"thstrm":"29.50","frmtrm":"29.20","lwfr":"67.80","stlm_dt":"2025-09-30"},{"rcept_no":"20251114002447","corp_code":"00126380","corp_cls":"Y" │
+│ ,"corp_name":"삼성전자","se":"현금배당수익률(%)","stock_knd":"보통주","thstrm":"1.30","frmtrm":"2.70","lwfr":"1.90","stlm_dt":"2025-09-30"},{"rcept_no":"20251114002447","cor │
+│ p_code":"00126380","corp_cls":"Y","corp_name":"삼성전자","se":"현금배당수익률(%)","stock_knd":"우선주","thstrm":"1.70","frmtrm":"3.30","lwfr":"2.40","stlm_dt":"2025-09-30"}, │
+│ {"rcept_no":"20251114002447","corp_code":"00126380","corp_cls":"Y","corp_name":"삼성전자","se":"주식배당수익률(%)","stock_knd":"보통주","thstrm":"-","frmtrm":"-","lwfr":"-", │
+│ "stlm_dt":"2025-09-30"},{"rcept_no":"20251114002447","corp_code":"00126380","corp_cls":"Y","corp_name":"삼성전자","se":"주식배당수익률(%)","stock_knd":"우선주","thstrm":"-", │
+│ "frmtrm":"-","lwfr":"-","stlm_dt":"2025-09-30"},{"rcept_no":"20251114002447","corp_code":"00126380","corp_cls":"Y","corp_name":"삼성전자","se":"주당                          │
+│ 현금배당금(원)","stock_knd":"보통주","thstrm":"1,102","frmtrm":"1,446","lwfr":"1,444","stlm_dt":"2025-09-30"},{"rcept_no":"20251114002447","corp_code":"00126380","corp_cls": │
+│ "Y","corp_name":"삼성전자","se":"주당                                                                                                                                         │
+│ 현금배당금(원)","stock_knd":"우선주","thstrm":"1,102","frmtrm":"1,447","lwfr":"1,445","stlm_dt":"2025-09-30"},{"rcept_no":"20251114002447","corp_code":"00126380","corp_cls": │
+│ "Y","corp_name":"삼성전자","se":"주당                                                                                                                                         │
+│ 주식배당(주)","stock_knd":"보통주","thstrm":"-","frmtrm":"-","lwfr":"-","stlm_dt":"2025-09-30"},{"rcept_no":"20251114002447","corp_code":"00126380","corp_cls":"Y","corp_name │
+│ ":"삼성전자","se":"주당 주식배당(주)","stock_knd":"우선주","thstrm":"-","frmtrm":"-","lwfr":"-","stlm_dt":"2025-09-30"}]                                                      │
+╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+✦ 삼성전자 배당 정보 (2025년 9월 30일 기준):
+
+   * 주당 현금배당금(원)
+       * 보통주: 1,102원
+       * 우선주: 1,102원
+   * 현금배당수익률(%)
+       * 보통주: 1.30%
+       * 우선주: 1.70%
+   * 현금배당금총액(백만원): 7,354,422 백만원
+   * (연결)현금배당성향(%): 29.50%
+
+ℹ Gemini CLI update available! 0.17.1 → 0.22.5
+  Installed via Homebrew. Please update with "brew upgrade".
+
+ Using: 1 GEMINI.md file | 1 MCP server
+╭───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ >   Type your message or @path/to/file                                                                                                                                        │
+╰───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+ ~/Development/sayouzone/mcp-opendart-server (main*)                                                 no sandbox (see /docs)                                                 auto
+```
+
+**MCP 서버에 대한 요청 질문(예제)**
 
 - 삼성전자
 - 삼성전자 재무제표 보여줘
