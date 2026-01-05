@@ -249,6 +249,24 @@ def dividend(stock: str, year: Optional[int] = None, quarter: Optional[int] = No
         f"문서번호, 기업코드, 기업명, 당기순이익(백만원), 현금배당수익률(%), 주당순이익(원), 주당 현금배당금(원), 현금배당성향(%), 현금배당금총액(백만원)을 응답합니다."
     )
 
+@mcp.prompt()
+def finance(stock: str, year: Optional[int] = None, quarter: Optional[int] = None):
+    """Find financial statements of a company."""
+
+    return (
+        f"{stock}의 {year}년 {quarter}분기 재무제표를 찾았습니다."
+        #f"문서번호, 기업코드, 기업명, 당기순이익(백만원), 현금배당수익률(%), 주당순이익(원), 주당 현금배당금(원), 현금배당성향(%), 현금배당금총액(백만원)을 응답합니다."
+    )
+
+@mcp.prompt()
+def compensation(stock: str, year: Optional[int] = None):
+    """Find director's compensation of a company."""
+
+    return (
+        f"{stock}의 {year}년 이사 및 감사 보수 정보를 찾았습니다."
+        #f"문서번호, 기업코드, 기업명, 당기순이익(백만원), 현금배당수익률(%), 주당순이익(원), 주당 현금배당금(원), 현금배당성향(%), 현금배당금총액(백만원)을 응답합니다."
+    )
+
 def _find_dividend(stock: str, year: Optional[int] = None, quarter: Optional[int] = None):
     """Find dividend information of a company."""
 

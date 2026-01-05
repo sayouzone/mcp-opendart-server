@@ -439,6 +439,8 @@ Tips for getting started:
  ~/Development/sayouzone/mcp-opendart-server (main*)                                                 no sandbox (see /docs)                                                 auto
 ```
 
+![Gemini CLI](https://storage.googleapis.com/sayouzone-homepage/blog/opendart_gemini_cli.png)
+
 **MCP 서버에 대한 요청 질문(예제)**
 
 - 삼성전자
