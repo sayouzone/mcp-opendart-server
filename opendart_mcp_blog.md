@@ -1,7 +1,7 @@
 # OpenDart MCP Server 구축
 
 `sayou-stock`을 이용하여 OpenDart API를 호출하는 MCP 서버를 구축합니다.<br/>
-주식 정보를 `OpenDart`에서 종목 기본 정보 (펀더멘탈, fundamental)를 가져옵니다.
+`OpenDart`에서 종목 기본 정보 (`공시정보`, `정기보고서 주요정보`, `정기보고서 재무정보`, `지분공시 종합정보`, `주요사항보고서 주요정보`, `증권신고서 주요정보`)를 가져옵니다.
 
 MCP 서버는 LLM에 외부 도구 및 서비스에 대한 액세스 권한을 제공합니다.<br/>
 FastMCP를 사용하여 MCP 서버와 클라이언트를 빌드하는 빠르고 Pythonic한 방법을 제공합니다.<br/>
@@ -16,9 +16,6 @@ FastMCP를 사용하여 MCP 서버와 클라이언트를 빌드하는 빠르고 
 - [지분공시 종합정보](https://opendart.fss.or.kr/guide/main.do?apiGrpCd=DS004)
 - [주요사항보고서 주요정보](https://opendart.fss.or.kr/guide/main.do?apiGrpCd=DS005)
 - [증권신고서 주요정보](https://opendart.fss.or.kr/guide/main.do?apiGrpCd=DS006)
-
-**참조 문서**
-- [Cloud Run에 보안 MCP 서버를 배포하는 방법](https://codelabs.developers.google.com/codelabs/cloud-run/how-to-deploy-a-secure-mcp-server-on-cloud-run?hl=ko)
 
 ![OpenDart MCP Server Build Process](https://storage.googleapis.com/sayouzone-homepage/blog/opendart_mcp_sesrver_build_process.jpg)
 
@@ -143,7 +140,7 @@ crawler.save_corp_data(corpcode_filename)
     """,
     tags={"opendart", "fundamentals", "korea", "standardized", "cached"}
 )
-async def find_opendart_finance(stock: str, year: Optional[int] = None, quarter: Optional[int] = None):
+def find_opendart_finance(stock: str, year: Optional[int] = None, quarter: Optional[int] = None):
     """
     OpenDART에서 한국 주식 재무제표 3종을 수집합니다.
 
@@ -184,6 +181,39 @@ OpenDart에서 일부 API는 주식 코드를 통해서 정보를 조회할 수 
     corp_code = crawler.fetch_corp_code(stock)
 ```
 
+`@mcp.prompt()`으로 커스텀 명렬어를 자동으로 생성합니다.</br>
+
+```python
+@mcp.prompt()
+def dividend(stock: str, year: Optional[int] = None, quarter: Optional[int] = None):
+    """Find dividend information of a company."""
+
+    return (
+        f"{stock}의 {year}년 {quarter}분기 배당 정보를 찾았습니다."
+        f"문서번호, 기업코드, 기업명, 당기순이익(백만원), 현금배당수익률(%), 주당순이익(원), 주당 현금배당금(원), 현금배당성향(%), 현금배당금총액(백만원)을 응답합니다."
+    )
+```
+
+`/dividend --stock=삼성전자 --year=2025` 또는 `/dividend 삼성전자 --year=2025` 명령어를 실행합니다.
+
+출력 결과물은 `문서번호`, `기업코드`, `기업명`, `당기순이익(백만원)`, `현금배당수익률(%)`, `주당순이익(원)`, `주당 현금배당금(원)`, `현금배당성향(%)`, `현금배당금총액(백만원)` 포함해서 출력합니다.
+
+**출력 예시**
+
+```bash
+✦ 삼성전자의 2025년 배당 정보입니다.
+
+   * 문서번호: 20251114002447
+   * 기업코드: 00126380
+   * 기업명: 삼성전자
+   * 당기순이익(백만원): 24,968,902
+   * 현금배당수익률(%): 1.30
+   * 주당순이익(원): 3,724
+   * 주당 현금배당금(원): 1,102
+   * 현금배당성향(%): 29.50
+   * 현금배당금총액(백만원): 7,354,422
+```
+
 ## MCP 서버 배포 (Deploy MCP Server on Cloud Run)
 
 ```bash
@@ -202,6 +232,8 @@ gcloud projects add-iam-policy-binding $GOOGLE_CLOUD_PROJECT \
 #### 배포
 
 **패키지 빌드 및 배포**
+
+`--no-allow-unauthenticated` 옵션을 사용하여 인증을 요구합니다. 
 
 ```bash
 gcloud run deploy $MCP_SERVER_NAME \
@@ -259,6 +291,8 @@ gcloud projects add-iam-policy-binding $GOOGLE_CLOUD_PROJECT \
 - [Gemini CLI Custom Slash Commands](https://cloud.google.com/blog/topics/developers-practitioners/gemini-cli-custom-slash-commands?e=48754805)
 
 #### Gemini CLI 테스트
+
+Gemini 설정 파일에서 사용할 수 있도록 Google Cloud 사용자 인증 정보와 프로젝트 번호를 환경 변수로 설정합니다.
 
 ```bash
 export PROJECT_NUMBER=$(gcloud projects describe $GOOGLE_CLOUD_PROJECT --format="value(projectNumber)")
@@ -337,6 +371,9 @@ Tips for getting started:
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
  ~/.../src/sayou/mcp/stocks_mcp (main*)                                      no sandbox (see /docs)                                       auto
 ```
+
+MCP 서버가 정상적으로 실행되면 Gemini CLI를 사용하여 MCP 서버를 테스트할 수 있습니다.<br/>
+아래 화면은 `삼성전자 배당에 대해 알려줘`를 입력한 후의 결과입니다.
 
 ```bash
    ░░░            ░░░░░░░░░  ░░░░░░░░░░ ░░░░░░   ░░░░░░ ░░░░░ ░░░░░░   ░░░░░ ░░░░░
@@ -420,4 +457,5 @@ Tips for getting started:
 
 ## References
 
+- [Cloud Run에 보안 MCP 서버를 배포하는 방법](https://codelabs.developers.google.com/codelabs/cloud-run/how-to-deploy-a-secure-mcp-server-on-cloud-run?hl=ko)
 - [Cloud Run에서 MCP 서버를 사용하는 ADK 에이전트 빌드 및 배포](https://codelabs.developers.google.com/codelabs/cloud-run/use-mcp-server-on-cloud-run-with-an-adk-agent?hl=ko)
