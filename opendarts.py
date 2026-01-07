@@ -87,7 +87,7 @@ async def find_opendart_finance(stock: str, year: Optional[int] = None, quarter:
     count = 1
     while True:
         logger.info(f"fetching finance data: {year}Q{quarter}")
-        data = crawler.single_company_financial_statements(corp_code, year, quarter=quarter)
+        data = crawler.financial_statements(corp_code, year, quarter=quarter)
         if is_date or len(data) > 0 or count > 4:
             break
         quarter = quarter - 1 if quarter > 1 else 4
