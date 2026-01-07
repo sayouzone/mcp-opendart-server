@@ -163,7 +163,7 @@ dependencies = [
 
 ### opendarts.py: 핵심 로직
 
-OpenDart API 키 ([발급받기](https://opendart.fss.or.kr/))
+✅ OpenDart API 키 ([발급받기](https://opendart.fss.or.kr/))
 
 #### 1) 초기 설정 및 API 키 로드
 
@@ -636,4 +636,4 @@ def analyze_financial_health(stock: str):
 
 **소스 코드**: [github.com/sayouzone/mcp-opendart-server](https://github.com/sayouzone/mcp-opendart-server)
 
-질문이나 피드백은 GitHub Issues에 남겨주세요! 🙌
+질문이나 피드백은 cksdn2034@sayouzone.com 의견을 보내주세요! 🙌
