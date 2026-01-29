@@ -1,9 +1,9 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.sayouzone/mcp-opendart-server",
-  "description": "An MCP server that provides [describe what your server does]",
+  "description": "An MCP server that provides OpenDart API",
   "repository": {
-    "url": "https://kcw2034-sayouzone@github.com/sayouzone/mcp-opendart-server",
+    "url": "https://github.com/sayouzone/mcp-opendart-server",
     "source": "github"
   },
   "version": "1.0.0",
@@ -17,11 +17,11 @@
       },
       "environmentVariables": [
         {
-          "description": "Your API key for the service",
+          "description": "Your API key for OpenDart",
           "isRequired": true,
           "format": "string",
           "isSecret": true,
-          "name": "YOUR_API_KEY"
+          "name": "OPENDART_API_KEY"
         }
       ]
     }
