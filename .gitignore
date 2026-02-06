@@ -213,3 +213,6 @@ __marimo__/
 
 # uv
 uv.lock
+
+# mcp
+.mcpregistry_github_token
